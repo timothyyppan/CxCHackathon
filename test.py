@@ -12,6 +12,7 @@ df = pd.read_excel(excel_file, engine='openpyxl')
 
 #df['fire_cause'] = df.apply(fc.filter_fire_causes, axis=1)
 df_filtered_causes = fc.filter_fire_causes(df)
-print(df_filtered_causes['general_cause_desc'].iloc[90, 91])
+indices = list(range(90, 121, 1))
+print(df_filtered_causes['general_cause_desc'].iloc[indices])
 #indices = [90, 91, 92, 93, 94, 95, 96]
 #print(df_filtered_causes.iloc[indices])
