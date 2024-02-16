@@ -9,5 +9,6 @@ df = pd.read_excel(excel_file, engine='openpyxl')
 
 #df['impact_score'] = df.apply(imsc.get_impact_score(df), axis=1)
 
-df['fire_cause'] = df.apply(fc.get_fire_cause, axis=1)
-print(df['fire_cause'])
+#df['fire_cause'] = df.apply(fc.filter_fire_causes, axis=1)
+df_filtered_causes = fc.filter_fire_causes(df)
+print(df_filtered_causes.iloc[12])
