@@ -11,4 +11,4 @@ df = pd.read_excel(excel_file, engine='openpyxl')
 
 #df['fire_cause'] = df.apply(fc.filter_fire_causes, axis=1)
 df_filtered_causes = fc.filter_fire_causes(df)
-print(df_filtered_causes.iloc[98])
+print(df_filtered_causes.iloc[12])
