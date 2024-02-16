@@ -1,9 +1,9 @@
 import pandas as pd
-from datetime import datetime
 
-def datetime_to_epoch(datetime):
-    if pd.isnull(datetime):
-        return None
-    date_format = "%Y-%m-%d %H:%M"
-    parsed_datetime = datetime.strptime(datetime, date_format)
+def dates_to_epochs(datetime_column):
     
+    datetime_column = pd.to_datetime(datetime_column)
+    epoch = pd.Timestamp('1970-01-01')
+    datetime_column = (datetime_column - epoch) // pd.Timedelta('1s')
+    
+    return datetime_column
