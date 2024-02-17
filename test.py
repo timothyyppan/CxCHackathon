@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 import ImpactScore as imsc
-import FilterFireCause as fc
+import FilterFireCause as ffc
 import numpy as np
 
 excel_file = 'fp-historical-wildfire-data-2006-2021.xlsx'
@@ -11,7 +11,7 @@ df = pd.read_excel(excel_file, engine='openpyxl')
 #df['impact_score'] = df.apply(imsc.get_impact_score(df), axis=1)
 
 #df['fire_cause'] = df.apply(fc.filter_fire_causes, axis=1)
-df_filtered_causes = fc.filter_fire_causes(df)
+df_filtered_causes = ffc.filter_fire_causes(df)
 df_cause_industry = df_filtered_causes[0]
 df_cause_activity = df_filtered_causes[1]
 df_true_cause = df_filtered_causes[2]
