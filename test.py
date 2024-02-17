@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
 import ImpactScore as imsc
-import FireCause as fc
+import FilterFireCause as fc
 import numpy as np
 
 excel_file = 'fp-historical-wildfire-data-2006-2021.xlsx'

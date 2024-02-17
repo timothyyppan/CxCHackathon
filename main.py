@@ -2,7 +2,7 @@ import pandas as pd
 import math
 import ImpactScore as imsc
 import ColumnDatesToEpochs as cde
-import FireCause as fc
+import FilterFireCause as fc
 
 excel_file = 'fp-historical-wildfire-data-2006-2021.xlsx'
 
