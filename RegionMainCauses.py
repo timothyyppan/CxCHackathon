@@ -20,6 +20,16 @@ def region_main_causes(df_filtered_causes, region):
     if region in title_mapping:
         region = title_mapping[region]
     
-    # Determining main industries that usually cause wildfires near a certain region
+    fire_code = [region + 'WF']
+    fire_number = df_filtered_causes['fire_number']
 
-    return region
+    # Isolating wildfires of that certain region by acquiring indices of rows containing fire code
+    
+    region_indices = []
+    for i, string in enumerate(fire_number):
+        if fire_code in string:
+            region_indices.append(i)
+    
+    region_fire_causes = df_filtered_causes[region_indices, :]
+
+    return region_fire_causes
