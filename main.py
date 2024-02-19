@@ -3,6 +3,7 @@ import math
 import ImpactScore as imsc
 import ColumnDatesToEpochs as cde
 import FilterFireCause as ffc
+import ModelTrainer as mt
 
 excel_file = 'fp-historical-wildfire-data-2006-2021.xlsx'
 
@@ -25,6 +26,8 @@ cde.column_dates_to_epochs(df)
 
 #Creates a column and fills it with the calculated impact score
 df['impact_score'] = df.apply(imsc.get_impact_score, axis=1)
+
+mt.train_model(df)
 
 #df['fire_cause'] = df.apply(ffc.filter_fire_causes, axis=1)
 #df_filtered_causes = ffc.filter_fire_causes(df)
