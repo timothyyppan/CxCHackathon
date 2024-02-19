@@ -21,6 +21,7 @@ def region_main_causes(df_filtered_causes, region):
         region = title_mapping[region]
     
     fire_code = [region + 'WF']
+    print(df_filtered_causes['fire_number'])
     fire_number = df_filtered_causes['fire_number']
 
     # Isolating wildfires of that certain region by acquiring indices of rows containing fire code
