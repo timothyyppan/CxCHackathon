@@ -21,7 +21,6 @@ def region_main_causes(df, df_filtered_causes, region):
     if region in title_mapping:
         region = title_mapping[region]
     
-    #print(df_filtered_causes['fire_number'])
     fire_number = df['fire_number']
 
     # Isolating wildfires of that certain region by acquiring indices of rows containing fire code
@@ -35,9 +34,6 @@ def region_main_causes(df, df_filtered_causes, region):
     #    if fire_code in string:
     #        region_indices.append(i)
 
-    #Is erroring because region_indices is empty, if condition is not executing so when we call a return statement, it is empty
-    #This is because we need to chop off the last three numbers of fire_number
-    #Also I noticed that there is only one item in fire_code, I think there needs to be a for loop
     print(region_indices)
     for i in region_indices:
         region_fire_causes = df_filtered_causes[region_indices, :]
