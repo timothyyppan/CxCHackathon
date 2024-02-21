@@ -14,4 +14,4 @@ def filter_fire_causes(df):
    # Isolating true cause and filtering out empty values
    true_cause = df['true_cause'].dropna()
 
-   return cause_category, cause_activity, true_cause, df
+   return df, cause_category, cause_activity, true_cause

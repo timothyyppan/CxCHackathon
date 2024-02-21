@@ -1,6 +1,5 @@
 
-def region_main_causes(fire_causes, region):
-    # Note: filter_fire_cause contains the isolated industry/category [0], activity [1], true cause [2], and main dataframe [3]
+def region_main_causes(region, df, cause_category, cause_activity, true_cause):
 
     # accounting for different input variations using title mapping
     region = region.upper() # this alone accounts for inputs such as 'c'
@@ -23,16 +22,17 @@ def region_main_causes(fire_causes, region):
     if region in title_mapping:
         region = title_mapping[region]
 
-    # Calling the main dataframe, containing information on all wildfires
-    df = fire_causes[3]
+   
 
     # Isolating wildfires of that certain region 
     df_region = df[df['fire_number'] == region]
     
     # Calling the fire cause industry/category data
-    cause_category = fire_causes[0]
+    region_cause_category = cause_category[df['fire_number'] == region]
 
     # Determining main industry/category responsible for wildfire in a certain 
-    region_cause_category = cause_category[df_region.index]
+   # region_cause_category = df_region['general_cause_desc']
+
    
+
     return region_cause_category
