@@ -1,5 +1,6 @@
 import pandas as pd
 import math
+import joblib
 import ImpactScore as imsc
 import ColumnDatesToEpochs as cde
 import FilterFireCause as ffc
@@ -20,7 +21,7 @@ df.drop(index=14316, inplace=True)
 magnitude_all_current_sizes= math.sqrt((df['current_size']**2).sum())
 
 #Creates a column and fills it with the normalized current_size
-df['normalized_current_size'] = magnitude_all_current_sizes / df['current_size']
+df['normalized_current_size'] = df['current_size'] / magnitude_all_current_sizes 
 
 #Converts all date/time to epoch
 cde.column_dates_to_epochs(df)
@@ -33,24 +34,20 @@ columns_with_nans = ['fire_spread_rate', 'temperature', 'relative_humidity', 'wi
 df = dc.clean_data(df, columns_with_nans)
 
 #Trains the model **Need to optimize the model**
-model = mt.train_model(df)
+tensor_model = mt.train_tensor_model(df)
+regression_model = mt.train_regression_model(df)
 
 print(df['impact_score'])
 
-
-#For tomorrow, implement a linear regression model
-#and see if it is better than the tensor
-#Also try and improve the tensor model (try multiplying the predictions to manually get the right value)
-stop = False
-while(stop == False):
-    stop_input = input("Stop? ")
+stop_input = ""
+while(True):
     if stop_input == 'Yes':
-        stop == True
+        break
     current_size = input("current_size: ")
     assessment_hectares = input("assessment_hectares: ")
     fire_spread_rate = input("fire_spread_rate: ")
     temperature = input("temperature: ")
-    relative_humidity = input("relative_hymidity: ")
+    relative_humidity = input("relative_humidity: ")
     wind_speed = input("wind_speed: ")
     uc_hectares = input("uc_hectares: ")
 
@@ -63,7 +60,18 @@ while(stop == False):
         'wind_speed': [wind_speed],
         'uc_hectares': [uc_hectares]
         })
-    mu.use_model(model, new_features)
+    
+    tensor_scaler = joblib.load('tensor_scaler.save')
+    regression_scaler = joblib.load('regression_scaler.save')
+    tensor_prediction = mu.use_tensor_model(tensor_model, new_features, tensor_scaler)
+    regression_prediction = mu.use_regression_model(regression_model, new_features, regression_scaler)
+
+    print(tensor_prediction)
+    print(regression_prediction)
+
+    
+    stop_input = input("Stop? ")
+    
 #df['fire_cause'] = df.apply(ffc.filter_fire_causes, axis=1)
 #df_filtered_causes = ffc.filter_fire_causes(df)
 #print(df_filtered_causes.iloc[12])
