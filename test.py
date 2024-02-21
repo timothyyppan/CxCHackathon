@@ -5,6 +5,7 @@ import FilterFireCause as ffc
 import RegionMainCauses as rmc
 import numpy as np
 import FireNumberTrimmer as fnt
+import GetVulnerableRegions as vr
 
 excel_file = 'fp-historical-wildfire-data-2006-2021.xlsx'
 
@@ -27,3 +28,5 @@ df['fire_number'] = fnt.trim_fire_number(df['fire_number'])
 df_region_main_causes = rmc.region_main_causes('calgary', df, cause_category, cause_activity, true_cause)
 print(df_region_main_causes)
 
+df_vulnerable_regions = vr.get_vulnerable_regions(df)
+print(df_vulnerable_regions)
