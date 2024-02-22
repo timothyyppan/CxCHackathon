@@ -1,8 +1,4 @@
-from sklearn.preprocessing import StandardScaler
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.utils.data import DataLoader, TensorDataset
 
 def use_tensor_model(model, new_features, scaler):
     new_features_scaled = scaler.transform(new_features)

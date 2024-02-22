@@ -8,12 +8,13 @@ import ModelTrainer as mt
 import ModelUse as mu
 import DataCleaner as dc
 
+#Store file path of the dataset
 excel_file = 'fp-historical-wildfire-data-2006-2021.xlsx'
 
-#Opens the excel file as a dataframe using pandas
+#Opens the dataset as a pandas dataframe
 df = pd.read_excel(excel_file, engine='openpyxl')
 
-#Removes dates that have a typo
+#Removes rows where dates that have a typo
 df.drop(index=1291, inplace=True)
 df.drop(index=14316, inplace=True)
 
@@ -29,46 +30,53 @@ cde.column_dates_to_epochs(df)
 #Creates a column and fills it with the calculated impact score
 df['impact_score'] = df.apply(imsc.get_impact_score, axis=1)
 
-#Removes any rows that are bad
+#Removes any rows that have NaNs
 columns_with_nans = ['fire_spread_rate', 'temperature', 'relative_humidity', 'wind_speed', 'ex_hectares', 'impact_score']
 df = dc.clean_data(df, columns_with_nans)
 
 #Trains the model **Need to optimize the model**
-tensor_model = mt.train_tensor_model(df)
 regression_model = mt.train_regression_model(df)
+#Tensor model not used due to overfitting
+#tensor_model = mt.train_tensor_model(df)
 
-print(df['impact_score'])
-
+#Interface for using the prediction models
 stop_input = ""
 while(True):
     if stop_input == 'Yes':
         break
+
+    #Gets features from the user
     current_size = input("current_size: ")
     assessment_hectares = input("assessment_hectares: ")
     fire_spread_rate = input("fire_spread_rate: ")
     temperature = input("temperature: ")
     relative_humidity = input("relative_humidity: ")
     wind_speed = input("wind_speed: ")
-    uc_hectares = input("uc_hectares: ")
 
+    #Stores new features
     new_features = pd.DataFrame({
         'current_size': [current_size],
         'assessment_hectares': [assessment_hectares],
         'fire_spread_rate': [fire_spread_rate],
         'temperature': [temperature],
         'relative_humidity': [relative_humidity],
-        'wind_speed': [wind_speed],
-        'uc_hectares': [uc_hectares]
+        'wind_speed': [wind_speed]
         })
     
-    tensor_scaler = joblib.load('tensor_scaler.save')
+    #Loads scalers for the models
     regression_scaler = joblib.load('regression_scaler.save')
-    tensor_prediction = mu.use_tensor_model(tensor_model, new_features, tensor_scaler)
+    #Tensor scaler not needed
+    #tensor_scaler = joblib.load('tensor_scaler.save')
+
+    #Models make a prediction of the final burn size and the impact score
     regression_prediction = mu.use_regression_model(regression_model, new_features, regression_scaler)
+    #Tensor model not used
+    #tensor_prediction = mu.use_tensor_model(tensor_model, new_features, tensor_scaler)
 
-    print(tensor_prediction)
+    #Prints the results of the model
     print(regression_prediction)
-
+    #Tensor model not used
+    #print(tensor_prediction)
     
     stop_input = input("Stop? ")
     

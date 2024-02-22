@@ -1,3 +1,4 @@
+#Converts all elements in datetime columns into epoch
 import pandas as pd
 
 def dates_to_epochs(datetime_element):

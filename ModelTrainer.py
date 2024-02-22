@@ -31,8 +31,8 @@ class WildfireNet(nn.Module):
 def train_tensor_model(df):
     features = df[['current_size', 'assessment_hectares', 
                         'fire_spread_rate', 'temperature', 
-                        'relative_humidity', 'wind_speed', 
-                        'uc_hectares']]
+                        'relative_humidity', 'wind_speed'
+                        ]]
     target = df[['ex_hectares', 'impact_score']]
 
     # Data preparation
@@ -85,8 +85,8 @@ def train_tensor_model(df):
 def train_regression_model(df):
     features = df[['current_size', 'assessment_hectares', 
                         'fire_spread_rate', 'temperature', 
-                        'relative_humidity', 'wind_speed', 
-                        'uc_hectares']]
+                        'relative_humidity', 'wind_speed'
+                        ]]
     target = df[['ex_hectares', 'impact_score']]
     x_train, x_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
 
@@ -100,7 +100,3 @@ def train_regression_model(df):
     model.fit(x_train_scaled, y_train)
 
     return model
-
-    #mse = mean_squared_error(y_test, y_pred)
-
-    #print(f"Mean Squared Error: {mse}")
