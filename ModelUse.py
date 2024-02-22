@@ -12,6 +12,6 @@ def use_tensor_model(model, new_features, scaler):
 
 def use_regression_model(model, new_features, scaler):
     new_features = scaler.transform(new_features)
-    predictions = model.predict(new_features)
+    predictions = abs(model.predict(new_features) / 10)
 
     return predictions

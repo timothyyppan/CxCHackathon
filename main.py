@@ -18,11 +18,15 @@ df = pd.read_excel(excel_file, engine='openpyxl')
 df.drop(index=1291, inplace=True)
 df.drop(index=14316, inplace=True)
 
+#Converts size_class from letters to numbers
+size_class_mapping = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6}
+df['size_class_num'] = df['size_class'].map(size_class_mapping)
+
 #Calculates the magnitude of the current_size column
 magnitude_all_current_sizes= math.sqrt((df['current_size']**2).sum())
 
 #Creates a column and fills it with the normalized current_size
-df['normalized_current_size'] = df['current_size'] / magnitude_all_current_sizes 
+df['normalized_current_size'] = df['current_size'] / magnitude_all_current_sizes
 
 #Converts all date/time to epoch
 cde.column_dates_to_epochs(df)
@@ -31,7 +35,12 @@ cde.column_dates_to_epochs(df)
 df['impact_score'] = df.apply(imsc.get_impact_score, axis=1)
 
 #Removes any rows that have NaNs
-columns_with_nans = ['fire_spread_rate', 'temperature', 'relative_humidity', 'wind_speed', 'ex_hectares', 'impact_score']
+columns_with_nans = ['bh_hectares', 'uc_hectares', 
+                     'assessment_hectares', 
+                     'fire_spread_rate', 'temperature', 
+                     'relative_humidity', 'wind_speed', 
+                     'impact_score'
+                     ]
 df = dc.clean_data(df, columns_with_nans)
 
 #Trains the model **Need to optimize the model**
@@ -46,7 +55,8 @@ while(True):
         break
 
     #Gets features from the user
-    current_size = input("current_size: ")
+    bh_hectares = input("bh_hectares: ")
+    uc_hectares = input("uc_hectares: ")
     assessment_hectares = input("assessment_hectares: ")
     fire_spread_rate = input("fire_spread_rate: ")
     temperature = input("temperature: ")
@@ -55,7 +65,8 @@ while(True):
 
     #Stores new features
     new_features = pd.DataFrame({
-        'current_size': [current_size],
+        'bh_hectares': [bh_hectares],
+        'uc_hectares': [uc_hectares],
         'assessment_hectares': [assessment_hectares],
         'fire_spread_rate': [fire_spread_rate],
         'temperature': [temperature],
