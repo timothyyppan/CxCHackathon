@@ -68,3 +68,5 @@ while(stop == False):
 #df['fire_cause'] = df.apply(ffc.filter_fire_causes, axis=1)
 #df_filtered_causes = ffc.filter_fire_causes(df)
 #print(df_filtered_causes.iloc[12])
+=======
+>>>>>>> Stashed changes
