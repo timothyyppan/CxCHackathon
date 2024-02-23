@@ -10,6 +10,12 @@ import DataCleaner as dc
 import FireNumberTrimmer as fnt
 import RegionMainCauses as rmc
 import GetVulnerableRegions as gvr
+import LetterToRegion as ltr
+import TopBurnArea  as tba
+import TopImpact as ti
+import WildFireMainCause as wfmc
+import GetIndigenousVulnerability as giv
+import GetPopulationVulnerability as gpv
 
 #Accurate when current size is above 1 hectare under 10% error
 #When below 1 hectare, error increases drastically, however
@@ -24,10 +30,6 @@ df = pd.read_excel(excel_file, engine='openpyxl')
 #Removes rows where dates that have a typo
 df.drop(index=1291, inplace=True)
 df.drop(index=14316, inplace=True)
-
-#Converts size_class from letters to numbers
-size_class_mapping = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6}
-df['size_class_num'] = df['size_class'].map(size_class_mapping)
 
 #Calculates the magnitude of the current_size column
 magnitude_all_current_sizes= math.sqrt((df['current_size']**2).sum())
@@ -46,13 +48,14 @@ columns_with_nans = ['bh_hectares', 'uc_hectares',
                      'assessment_hectares', 
                      'fire_spread_rate', 'temperature', 
                      'relative_humidity', 'wind_speed', 
-                     'impact_score'
+                     'impact_score', 'true_cause',
+                     'activity_class', 'general_cause_desc'
                      ]
 df = dc.clean_data(df, columns_with_nans)
 
 # Extracting filtered cause information
 fire_causes = ffc.filter_fire_causes(df)
-df = fire_causes[0]
+#df = fire_causes[0]
 cause_category = fire_causes[1]
 cause_activity = fire_causes[2]
 true_cause = fire_causes[3]
@@ -62,6 +65,10 @@ df['fire_number'] = fnt.trim_fire_number(df['fire_number'])
 
 #Finds the top three most vulnerable regions
 df_vulnerable_regions = gvr.get_vulnerable_regions(df)
+print(df_vulnerable_regions)
+df_vulnerable_region_names = []
+for region in df_vulnerable_regions:
+    df_vulnerable_region_names.append(ltr.get_region_from_letter(region))
 
 #Finds the main causes for the three most vulnerable regions
 df_region_main_causes = []
@@ -69,7 +76,7 @@ for main_cause in df_vulnerable_regions:
     df_region_main_causes.append(rmc.region_main_causes(main_cause, df, cause_category, cause_activity, true_cause))
 
 counter = 0
-for region in df_vulnerable_regions:
+for region in df_vulnerable_region_names:
     print(region + ":")
     for info in df_region_main_causes:
         if counter == 0:
@@ -84,9 +91,28 @@ for region in df_vulnerable_regions:
             print("Main True Causes Causing Wildfires")
             print(info[counter])
             counter = 0
-        
+    print()
 
-#Trains the model **Need to optimize the model**
+counter = 0
+for region in df_vulnerable_region_names:
+    print("Top 5 wildfires in " + region + " with largest burn area with its causes:")
+    for i in range(5):
+        print("#", (i + 1),  ": ", tba.get_top_burn_area(df, df_vulnerable_regions[counter])[i],  " hectares")
+        print("Main reason for #",  (i + 1),  ": ",  wfmc.get_cause_of_wf_burn(df, tba.get_top_burn_area(df, df_vulnerable_regions[counter])[i]))
+    print()
+    print("Top 5 wildfires in " + region + " with largest impact score with its causes:")
+    for i in range(5):
+        print("#",  (i + 1),  ": ",  ti.get_top_impact(df, df_vulnerable_regions[counter])[i])
+        print("Main reason for #",  (i + 1),  ": ",  wfmc.get_cause_of_wf_impact(df, ti.get_top_impact(df, df_vulnerable_regions[counter])[i]))
+    print()
+    print()
+    counter += 1
+
+for region in df_vulnerable_regions:
+    print("Population Vulnerability in " + ltr.get_region_from_letter(region) + ": ", gpv.get_population_vulnerability(df, region), "%")
+    print("Indigenous Vulnerability in " + ltr.get_region_from_letter(region) + ": ", giv.get_indigenous_vulnerability(df, region), "%")
+
+#Trains the model 
 regression_model = mt.train_regression_model(df)
 #Tensor model not used due to overfitting
 #tensor_model = mt.train_tensor_model(df)

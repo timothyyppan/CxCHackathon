@@ -23,10 +23,7 @@ def region_main_causes(region, df, cause_category, cause_activity, true_cause):
     if region in title_mapping:
         region = title_mapping[region]
 
-    # Isolating wildfires of that certain region 
-    df_region = df[df['fire_number'] == region]
-
-     # Isolating industries/categories, activities, and true causes responsible for wildfires in a certain region
+    # Isolating industries/categories, activities, and true causes responsible for wildfires in a certain region
     region_cat = cause_category[df['fire_number'] == region]
     region_act = cause_activity[df['fire_number'] == region]
     region_tc = true_cause[df['fire_number'] == region]
@@ -53,7 +50,7 @@ def region_main_causes(region, df, cause_category, cause_activity, true_cause):
     # Storing the two main industries/categories responsible for wildfires in certain region
     top_cat = [sorted_cat_counts[0], sorted_cat_counts[1]]
 
-     # ----------------------------------------------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------------------------------------------
     # Determining the main ACTIVITIES responsible for wildfires in certain region-------------------------------
     # Counting amounts of fire each activity is responsible for using a dictionary
     act_counts = {}
