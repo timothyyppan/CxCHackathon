@@ -5,6 +5,8 @@ from torch.utils.data import DataLoader, TensorDataset
 import torch.optim.lr_scheduler as lr_scheduler
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import Lasso
+import joblib
 
 class WildfireNet(nn.Module):
     def __init__(self, in_features):
@@ -25,16 +27,18 @@ class WildfireNet(nn.Module):
         x = self.fc3(x)
         return x
 
-def train_model(df):
-    features = df[['current_size', 'assessment_hectares', 
-                        'fire_spread_rate', 'temperature', 
-                        'relative_humidity', 'wind_speed', 
-                        'uc_hectares']]
-    target = df[['ex_hectares', 'impact_score']]
+def train_tensor_model(df):
+    features = df[[ 'bh_hectares', 'uc_hectares',
+                    'assessment_hectares', 
+                    'fire_spread_rate', 'temperature', 
+                    'relative_humidity', 'wind_speed'
+                    ]]
+    target = df[['current_score']]
 
     # Data preparation
     x_train, x_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
     scaler = StandardScaler().fit(x_train)
+    joblib.dump(scaler, 'tensor_scaler.save')
     x_train_scaled, x_test_scaled = scaler.transform(x_train), scaler.transform(x_test)
 
     # Convert to tensors
@@ -75,5 +79,25 @@ def train_model(df):
             outputs = model(data)
             loss = criterion(outputs, targets)
             total_loss += loss.item() * data.size(0)
+
+    return model
+
+def train_regression_model(df):
+    features = df[[ 'bh_hectares', 'uc_hectares',
+                    'assessment_hectares', 
+                    'fire_spread_rate', 'temperature', 
+                    'relative_humidity', 'wind_speed'
+                    ]]
+    target = df[['current_size']]
+    x_train = features
+    y_train = target
+
+    scaler = StandardScaler().fit(x_train)
+    joblib.dump(scaler, 'regression_scaler.save')
+    x_train_scaled = scaler.fit_transform(x_train)
+
+    model = Lasso(alpha=1)
+
+    model.fit(x_train_scaled, y_train)
 
     return model
