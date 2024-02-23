@@ -1,5 +1,5 @@
 #Gets the regions with the highest impact score
-#Note that impact score is a weighted score various factors
+#Note that impact score is a score calculated using various factors
 import ImpactScore as impsc
 import DataCleaner as dc
 
