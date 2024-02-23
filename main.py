@@ -8,6 +8,10 @@ import ModelTrainer as mt
 import ModelUse as mu
 import DataCleaner as dc
 
+#Accurate when current size is above 1 hectare under 10% error
+#When below 1 hectare, error increases drastically, however
+#it doesn't matter because the area is so small anyways
+
 #Store file path of the dataset
 excel_file = 'fp-historical-wildfire-data-2006-2021.xlsx'
 
@@ -78,8 +82,8 @@ while(True):
     regression_scaler = joblib.load('regression_scaler.save')
     #Tensor scaler not needed
     #tensor_scaler = joblib.load('tensor_scaler.save')
-
-    #Models make a prediction of the final burn size and the impact score
+    
+    #Models make a pre0diction of the final burn size and the impact score
     regression_prediction = mu.use_regression_model(regression_model, new_features, regression_scaler)
     #Tensor model not used
     #tensor_prediction = mu.use_tensor_model(tensor_model, new_features, tensor_scaler)
@@ -90,7 +94,3 @@ while(True):
     #print(tensor_prediction)
     
     stop_input = input("Stop? ")
-    
-#df['fire_cause'] = df.apply(ffc.filter_fire_causes, axis=1)
-#df_filtered_causes = ffc.filter_fire_causes(df)
-#print(df_filtered_causes.iloc[12])
