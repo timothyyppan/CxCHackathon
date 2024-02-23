@@ -6,5 +6,21 @@ def get_vulnerable_regions(df):
     # Calculating impact score of each wildfire
     impact_scores = impsc.get_impact_score(df)
 
+    # Summing the impact scores for each region, to get an overall region impact score
+    region_impacts = [sum(impact_scores[df['fire_number'] == 'C']), \
+                      sum(impact_scores[df['fire_number'] == 'E']), \
+                      sum(impact_scores[df['fire_number'] == 'H']), \
+                      sum( impact_scores[df['fire_number'] == 'G']), \
+                      sum(impact_scores[df['fire_number'] == 'L']), \
+                      sum(impact_scores[df['fire_number'] == 'M']), \
+                      sum(impact_scores[df['fire_number'] == 'P'])]
+   
 
-    return impact_scores
+
+
+
+
+
+    
+
+    return region_impacts
