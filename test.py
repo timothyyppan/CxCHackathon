@@ -57,8 +57,8 @@ print(df_region_main_causes)
 
 # Test get vulnerable regionp
 
-#df_vulnerable_regions = gvr.get_vulnerable_regions(df)
-#print(df_vulnerable_regions)
+df_vulnerable_regions = gvr.get_vulnerable_regions(df)
+print(df_vulnerable_regions)
 
 #df['fire_cause'] = df.apply(fc.filter_fire_causes, axis=1)
 df_filtered = ffc.filter_fire_causes(df) 
