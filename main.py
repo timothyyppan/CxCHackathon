@@ -65,7 +65,6 @@ df['fire_number'] = fnt.trim_fire_number(df['fire_number'])
 
 #Finds the top three most vulnerable regions
 df_vulnerable_regions = gvr.get_vulnerable_regions(df)
-print(df_vulnerable_regions)
 df_vulnerable_region_names = []
 for region in df_vulnerable_regions:
     df_vulnerable_region_names.append(ltr.get_region_from_letter(region))
@@ -119,8 +118,6 @@ for region in df_vulnerable_regions:
 regression_model = mt.train_regression_model(df)
 #Tensor model not used due to overfitting
 #tensor_model = mt.train_tensor_model(df)
-
-print(df['impact_score'])
 
 #Interface for using the prediction models
 stop_input = ""
