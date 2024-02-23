@@ -1,10 +1,6 @@
-<<<<<<< Updated upstream
-def region_main_causes(region, df, cause_category, cause_activity, true_cause):
-=======
 import pandas as pd
 
-def region_main_causes(df_filtered, region):
->>>>>>> Stashed changes
+def region_main_causes(region, df, cause_category, cause_activity, true_cause):
 
     # accounting for different input variations using title mapping
     region = region.upper() # this alone accounts for inputs such as 'c'
@@ -26,19 +22,11 @@ def region_main_causes(df_filtered, region):
 
     if region in title_mapping:
         region = title_mapping[region]
-<<<<<<< Updated upstream
-=======
-    
-    fire_code = region + 'WF'
-
-    fire_number = df_filtered['fire_number']
->>>>>>> Stashed changes
 
     # Isolating wildfires of that certain region 
     df_region = df[df['fire_number'] == region]
-    
-<<<<<<< Updated upstream
-    # Isolating industries/categories, activities, and true causes responsible for wildfires in a certain region
+
+     # Isolating industries/categories, activities, and true causes responsible for wildfires in a certain region
     region_cat = cause_category[df['fire_number'] == region]
     region_act = cause_activity[df['fire_number'] == region]
     region_tc = true_cause[df['fire_number'] == region]
@@ -65,7 +53,7 @@ def region_main_causes(df_filtered, region):
     # Storing the two main industries/categories responsible for wildfires in certain region
     top_cat = [sorted_cat_counts[0], sorted_cat_counts[1]]
 
-    # ----------------------------------------------------------------------------------------------------------------------
+     # ----------------------------------------------------------------------------------------------------------------------
     # Determining the main ACTIVITIES responsible for wildfires in certain region-------------------------------
     # Counting amounts of fire each activity is responsible for using a dictionary
     act_counts = {}
@@ -87,7 +75,7 @@ def region_main_causes(df_filtered, region):
     # Storing the two main activities responsible for wildfires in certain region
     top_act = [sorted_act_counts[0], sorted_act_counts[1]]
 
-    # -----------------------------------------------------------------------------------------------------------
+ # -----------------------------------------------------------------------------------------------------------
     # Determining the main TRUE CAUSES responsible for wildfires in certain region-------------------------------
     # Counting amounts of fire each true cause is responsible for using a dictionary
     tc_counts = {}
@@ -110,17 +98,10 @@ def region_main_causes(df_filtered, region):
     top_tc = [sorted_tc_counts[0], sorted_tc_counts[1]]
 
     return top_cat, top_act, top_tc
-=======
-    #region_indices = []
-    #for i, string in enumerate(fire_number):
-    #    if fire_code in string:
-    #        region_indices.append(i)
-    
-    #region_fire_causes = df_filtered_causes[df_filtered_causes['fire_number'].str.contains(fire_code, na=False)]
 
-    region_filtered = df_filtered[df_filtered['fire_number'].str.contains(fire_code)]
-    #cause_filtered = df[df['general_cause_desc'] != 'Undetermined']
- 
 
-    return region_filtered
->>>>>>> Stashed changes
+
+
+
+
+
