@@ -21,6 +21,7 @@ df = pd.read_excel(excel_file, engine='openpyxl')
 df.drop(index=1291, inplace=True)
 df.drop(index=14316, inplace=True)
 
+<<<<<<< Updated upstream
 #Calculates the magnitude of the current_size column
 magnitude_all_current_sizes= math.sqrt((df['current_size']**2).sum())
 
@@ -58,3 +59,23 @@ print(df_region_main_causes)
 
 df_vulnerable_regions = vr.get_vulnerable_regions(df)
 print(df_vulnerable_regions)
+=======
+#df['fire_cause'] = df.apply(fc.filter_fire_causes, axis=1)
+df_filtered = ffc.filter_fire_causes(df) 
+df_causes = df_filtered[0]
+df_cause_industry = df_filtered[1]
+df_cause_activity = df_filtered[2]
+df_true_cause = df_filtered[3]
+#indices = list(range(1, 10, 1))
+#print(df_cause_industry.iloc[indices])
+#print(df_cause_activity.head(10))
+#print(df_true_cause.head(10))
+
+print(df_causes)
+df_region_main_cause = rmc.region_main_causes(df_filtered, 'calgary')
+print(df_region_main_cause)
+#print(df_filtered['general_cause_desc'].iloc[indices])
+#print(df_filtered['activity_class'].iloc[indices])
+#indices = [90, 91, 92, 93, 94, 95, 96]
+#print(df_filtered.iloc[indices])
+>>>>>>> Stashed changes

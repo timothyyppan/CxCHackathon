@@ -28,6 +28,7 @@ cde.column_dates_to_epochs(df)
 #Creates a column and fills it with the calculated impact score
 df['impact_score'] = df.apply(imsc.get_impact_score, axis=1)
 
+<<<<<<< Updated upstream
 #Removes any rows that are bad
 columns_with_nans = ['fire_spread_rate', 'temperature', 'relative_humidity', 'wind_speed', 'ex_hectares', 'impact_score']
 df = dc.clean_data(df, columns_with_nans)
