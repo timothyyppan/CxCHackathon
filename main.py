@@ -7,6 +7,9 @@ import FilterFireCause as ffc
 import ModelTrainer as mt
 import ModelUse as mu
 import DataCleaner as dc
+import FireNumberTrimmer as fnt
+import RegionMainCauses as rmc
+import GetVulnerableRegions as gvr
 
 #Accurate when current size is above 1 hectare under 10% error
 #When below 1 hectare, error increases drastically, however
@@ -46,6 +49,42 @@ columns_with_nans = ['bh_hectares', 'uc_hectares',
                      'impact_score'
                      ]
 df = dc.clean_data(df, columns_with_nans)
+
+# Extracting filtered cause information
+fire_causes = ffc.filter_fire_causes(df)
+df = fire_causes[0]
+cause_category = fire_causes[1]
+cause_activity = fire_causes[2]
+true_cause = fire_causes[3]
+
+# Trimming the fire number to just the region code
+df['fire_number'] = fnt.trim_fire_number(df['fire_number'])
+
+#Finds the top three most vulnerable regions
+df_vulnerable_regions = gvr.get_vulnerable_regions(df)
+
+#Finds the main causes for the three most vulnerable regions
+df_region_main_causes = []
+for main_cause in df_vulnerable_regions:
+    df_region_main_causes.append(rmc.region_main_causes(main_cause, df, cause_category, cause_activity, true_cause))
+
+counter = 0
+for region in df_vulnerable_regions:
+    print(region + ":")
+    for info in df_region_main_causes:
+        if counter == 0:
+            print("Main Industries/Categories Causing Wildfires:")
+            print(info[counter])
+            counter += 1
+        elif counter == 1:
+            print("Main Activities Causing Wildfires:")
+            print(info[counter])
+            counter += 1
+        else:
+            print("Main True Causes Causing Wildfires")
+            print(info[counter])
+            counter = 0
+        
 
 #Trains the model **Need to optimize the model**
 regression_model = mt.train_regression_model(df)
