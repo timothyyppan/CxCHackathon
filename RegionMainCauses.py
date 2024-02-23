@@ -1,5 +1,5 @@
 import pandas as pd
-
+#Finds the main causes of wildfire in a region
 def region_main_causes(region, df, cause_category, cause_activity, true_cause):
 
     # accounting for different input variations using title mapping

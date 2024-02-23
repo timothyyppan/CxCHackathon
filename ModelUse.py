@@ -1,3 +1,4 @@
+#Makes a prediction using either the PyTorch model or Linear Regression model
 import torch
 import pandas as pd
 
@@ -14,9 +15,13 @@ def use_tensor_model(model, new_features, scaler):
 def use_regression_model(model, new_features, scaler):
     uc_hectares = pd.to_numeric(new_features['uc_hectares'], errors='coerce')
     new_features = scaler.transform(new_features)
+    predictions = model.predict(new_features)
+    
+    #Differentiates between uc_hectares being less than 1 as scaling needs to change to maintain accuracy
     if uc_hectares.iloc[0] <= 1:    
-        predictions = abs(model.predict(new_features) / 100)      
+        predictions[:, 0] = abs(predictions[:, 0]) / 100
     else:
-        predictions = abs(model.predict(new_features) / 10)  
-
+        predictions[:, 0] = abs(predictions[:, 0]) / 10
+    predictions[:, 1] = predictions[:, 1] * 10
+    
     return predictions

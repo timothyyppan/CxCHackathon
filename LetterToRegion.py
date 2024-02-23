@@ -1,3 +1,4 @@
+#Maps a letter to a region
 def get_region_from_letter(letter):
     title_mapping = { 
         'C' : 'Calgary',

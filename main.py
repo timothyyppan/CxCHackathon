@@ -1,3 +1,4 @@
+#Main File, Click run
 import pandas as pd
 import math
 import joblib
@@ -48,8 +49,7 @@ columns_with_nans = ['bh_hectares', 'uc_hectares',
                      'assessment_hectares', 
                      'fire_spread_rate', 'temperature', 
                      'relative_humidity', 'wind_speed', 
-                     'impact_score', 'true_cause',
-                     'activity_class', 'general_cause_desc'
+                     'impact_score', 'general_cause_desc'
                      ]
 df = dc.clean_data(df, columns_with_nans)
 
@@ -75,6 +75,7 @@ df_region_main_causes = []
 for main_cause in df_vulnerable_regions:
     df_region_main_causes.append(rmc.region_main_causes(main_cause, df, cause_category, cause_activity, true_cause))
 
+#Finds the main industries, activities, and true causes in the top three most vulnerable regions
 counter = 0
 for region in df_vulnerable_region_names:
     print(region + ":")
@@ -93,6 +94,7 @@ for region in df_vulnerable_region_names:
             counter = 0
     print()
 
+#Within each of the top three most vulnerable regions, it finds
 counter = 0
 for region in df_vulnerable_region_names:
     print("Top 5 wildfires in " + region + " with largest burn area with its causes:")
@@ -117,13 +119,15 @@ regression_model = mt.train_regression_model(df)
 #Tensor model not used due to overfitting
 #tensor_model = mt.train_tensor_model(df)
 
+print(df['impact_score'])
+
 #Interface for using the prediction models
 stop_input = ""
 while(True):
     if stop_input == 'Yes':
         break
 
-    #Gets features from the user
+    #Inputs features from the user
     bh_hectares = input("bh_hectares: ")
     uc_hectares = input("uc_hectares: ")
     assessment_hectares = input("assessment_hectares: ")

@@ -1,3 +1,4 @@
+#Trains the PyTorch and Linear Regression Model
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -15,10 +16,8 @@ class WildfireNet(nn.Module):
         self.fc2 = nn.Linear(128, 64)
         self.fc3 = nn.Linear(64, 2)
 
-        # Initialize weights using He initialization for ReLU activation
         nn.init.kaiming_uniform_(self.fc1.weight, nonlinearity='relu')
         nn.init.kaiming_uniform_(self.fc2.weight, nonlinearity='relu')
-        # Output layer initialization can be standard since there's no ReLU activation afterward
         nn.init.xavier_uniform_(self.fc3.weight)
 
     def forward(self, x):
@@ -33,7 +32,7 @@ def train_tensor_model(df):
                     'fire_spread_rate', 'temperature', 
                     'relative_humidity', 'wind_speed'
                     ]]
-    target = df[['current_score']]
+    target = df[['current_score', 'impact_score']]
 
     # Data preparation
     x_train, x_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
@@ -88,9 +87,8 @@ def train_regression_model(df):
                     'fire_spread_rate', 'temperature', 
                     'relative_humidity', 'wind_speed'
                     ]]
-    target = df[['current_size']]
+    y_train = df[['current_size', 'impact_score']]
     x_train = features
-    y_train = target
 
     scaler = StandardScaler().fit(x_train)
     joblib.dump(scaler, 'regression_scaler.save')

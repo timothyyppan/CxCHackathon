@@ -1,4 +1,5 @@
 #Calculated the impact score of a wildfire
+#Note that impact score is a score calculated using various factors
 def get_impact_score(row):
     current_size = row['current_size']
     normalized_current_size = row['normalized_current_size']
