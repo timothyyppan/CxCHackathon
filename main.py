@@ -94,7 +94,7 @@ for region in df_vulnerable_region_names:
             counter = 0
     print()
 
-#Within each of the top three most vulnerable regions, it finds
+#Within each of the top three most vulnerable regions, it finds the main reasons for both the top 5 largest burn areas and impact score
 counter = 0
 for region in df_vulnerable_region_names:
     print("Top 5 wildfires in " + region + " with largest burn area with its causes:")
@@ -110,6 +110,7 @@ for region in df_vulnerable_region_names:
     print()
     counter += 1
 
+#Finds the population and indigenous vulnerability
 for region in df_vulnerable_regions:
     print("Population Vulnerability in " + ltr.get_region_from_letter(region) + ": ", gpv.get_population_vulnerability(df, region), "%")
     print("Indigenous Vulnerability in " + ltr.get_region_from_letter(region) + ": ", giv.get_indigenous_vulnerability(df, region), "%")
@@ -162,4 +163,5 @@ while(True):
     #Tensor model not used
     #print(tensor_prediction)
     
+    #Checks if the user would want to make another prediction
     stop_input = input("Stop? ")
