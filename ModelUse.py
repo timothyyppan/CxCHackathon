@@ -8,9 +8,11 @@ def use_tensor_model(model, new_features, scaler):
 
     model.eval()
     with torch.no_grad():
-        predictons = model(new_features_tensor) * 10
+        predictions = model(new_features_tensor)
 
-    return predictons
+    predictions = abs(predictions) * 10
+
+    return predictions
 
 def use_regression_model(model, new_features, scaler):
     uc_hectares = pd.to_numeric(new_features['uc_hectares'], errors='coerce')
@@ -19,7 +21,7 @@ def use_regression_model(model, new_features, scaler):
     
     #Differentiates between uc_hectares being less than 1 as scaling needs to change to maintain accuracy
     if uc_hectares.iloc[0] <= 1:    
-        predictions[:, 0] = abs(predictions[:, 0]) / 100
+        predictions[:, 0] = abs(predictions[:, 0]) / 1000
     else:
         predictions[:, 0] = abs(predictions[:, 0]) / 10
     predictions[:, 1] = predictions[:, 1] * 10

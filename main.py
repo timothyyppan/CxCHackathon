@@ -75,22 +75,21 @@ for main_cause in df_vulnerable_regions:
     df_region_main_causes.append(rmc.region_main_causes(main_cause, df, cause_category, cause_activity, true_cause))
 
 #Finds the main industries, activities, and true causes in the top three most vulnerable regions
-counter = 0
-for region in df_vulnerable_region_names:
+for index, region in enumerate(df_vulnerable_region_names):
     print(region + ":")
-    for info in df_region_main_causes:
-        if counter == 0:
-            print("Main Industries/Categories Causing Wildfires:")
-            print(info[counter])
-            counter += 1
-        elif counter == 1:
-            print("Main Activities Causing Wildfires:")
-            print(info[counter])
-            counter += 1
-        else:
-            print("Main True Causes Causing Wildfires")
-            print(info[counter])
-            counter = 0
+
+    # Access the tuple for the current region by index
+    categories, activities, true_causes = df_region_main_causes[index]
+
+    print("Main Industries/Categories Causing Wildfires:")
+    print(categories)
+
+    print("Main Activities Causing Wildfires:")
+    print(activities)
+
+    print("Main True Causes Causing Wildfires:")
+    print(true_causes)
+
     print()
 
 #Within each of the top three most vulnerable regions, it finds the main reasons for both the top 5 largest burn areas and impact score
@@ -117,7 +116,7 @@ for region in df_vulnerable_regions:
 #Trains the model 
 regression_model = mt.train_regression_model(df)
 #Tensor model not used due to overfitting
-#tensor_model = mt.train_tensor_model(df)
+tensor_model = mt.train_tensor_model(df)
 
 #Interface for using the prediction models
 stop_input = ""
@@ -148,17 +147,17 @@ while(True):
     #Loads scalers for the models
     regression_scaler = joblib.load('regression_scaler.save')
     #Tensor scaler not needed
-    #tensor_scaler = joblib.load('tensor_scaler.save')
+    tensor_scaler = joblib.load('tensor_scaler.save')
     
     #Models make a pre0diction of the final burn size and the impact score
     regression_prediction = mu.use_regression_model(regression_model, new_features, regression_scaler)
     #Tensor model not used
-    #tensor_prediction = mu.use_tensor_model(tensor_model, new_features, tensor_scaler)
+    tensor_prediction = mu.use_tensor_model(tensor_model, new_features, tensor_scaler)
 
     #Prints the results of the model
     print(regression_prediction)
     #Tensor model not used
-    #print(tensor_prediction)
+    print(tensor_prediction)
     
     #Checks if the user would want to make another prediction
     stop_input = input("Stop? ")

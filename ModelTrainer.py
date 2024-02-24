@@ -32,7 +32,7 @@ def train_tensor_model(df):
                     'fire_spread_rate', 'temperature', 
                     'relative_humidity', 'wind_speed'
                     ]]
-    target = df[['current_score', 'impact_score']]
+    target = df[['current_size', 'impact_score']]
 
     # Data preparation
     x_train, x_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
