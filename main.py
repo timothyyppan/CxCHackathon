@@ -105,33 +105,37 @@ for region in df_vulnerable_region_names:
         print("#",  (i + 1),  ": ",  ti.get_top_impact(df, df_vulnerable_regions[counter])[i])
         print("Main reason for #",  (i + 1),  ": ",  wfmc.get_cause_of_wf_impact(df, ti.get_top_impact(df, df_vulnerable_regions[counter])[i]))
     print()
-    print()
     counter += 1
 
 #Finds the population and indigenous vulnerability
 for region in df_vulnerable_regions:
     print("Population Vulnerability in " + ltr.get_region_from_letter(region) + ": ", gpv.get_population_vulnerability(df, region), "%")
     print("Indigenous Vulnerability in " + ltr.get_region_from_letter(region) + ": ", giv.get_indigenous_vulnerability(df, region), "%")
+    print()
 
 #Trains the model 
 regression_model = mt.train_regression_model(df)
+print("Training Regression Model...")
+print()
 #Tensor model not used due to overfitting
-tensor_model = mt.train_tensor_model(df)
+#tensor_model = mt.train_tensor_model(df)
 
 #Interface for using the prediction models
 stop_input = ""
+
+print("Now entering interface to use the regression model")
 while(True):
     if stop_input == 'Yes':
         break
 
     #Inputs features from the user
-    bh_hectares = input("bh_hectares: ")
-    uc_hectares = input("uc_hectares: ")
-    assessment_hectares = input("assessment_hectares: ")
-    fire_spread_rate = input("fire_spread_rate: ")
-    temperature = input("temperature: ")
-    relative_humidity = input("relative_humidity: ")
-    wind_speed = input("wind_speed: ")
+    bh_hectares = input("Please enter the being held hectares (bh_hectares): ")
+    uc_hectares = input("Please enter the under control hectares (uc_hectares): ")
+    assessment_hectares = input("Please enter the assessment hectares (assessment_hectares): ")
+    fire_spread_rate = input("Please enter the fire spread rate (fire_spread_rate): ")
+    temperature = input("Please enter the temperature (temperature): ")
+    relative_humidity = input("Please enter the relative humidity (relative_humidity): ")
+    wind_speed = input("Please enter the wind speed (wind_speed): ")
 
     #Stores new features
     new_features = pd.DataFrame({
@@ -152,12 +156,17 @@ while(True):
     #Models make a pre0diction of the final burn size and the impact score
     regression_prediction = mu.use_regression_model(regression_model, new_features, regression_scaler)
     #Tensor model not used
-    tensor_prediction = mu.use_tensor_model(tensor_model, new_features, tensor_scaler)
+    #tensor_prediction = mu.use_tensor_model(tensor_model, new_features, tensor_scaler)
 
     #Prints the results of the model
-    print(regression_prediction)
+    print()
+    print("Regression Model Prediction:")
+    print("Final Burn Size: ", regression_prediction[0][0])
+    print("Impact Score", regression_prediction[0][1])
+    print()
     #Tensor model not used
-    print(tensor_prediction)
+    #print(tensor_prediction)
     
     #Checks if the user would want to make another prediction
     stop_input = input("Stop? ")
+    print()

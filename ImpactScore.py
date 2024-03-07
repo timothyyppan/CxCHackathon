@@ -10,6 +10,6 @@ def get_impact_score(row):
 
     detection_time = reported_date - fire_start_date
     containment_hectares = ex_hectares / current_size
-    impact_score = (normalized_current_size + detection_time + fire_spread_rate + containment_hectares) / 100000
+    impact_score = abs((normalized_current_size + detection_time + fire_spread_rate + containment_hectares) / 100000)
 
     return impact_score
